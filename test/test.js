@@ -25,3 +25,22 @@ describe('When searching on google', function () {
     await chromeless.end()
   })
 })
+
+describe('When clicking on the image of the demo playground', function () {
+  it('should redirect to the demo', async function () {
+    this.timeout(10000); //we need to increase the timeout or else mocha will exit with an error
+    const chromeless = new Chromeless({debug: true, scrollBeforeClick: true, implicitWait: true})
+    await chromeless.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36')
+    await chromeless.goto('https://github.com/graphcool/chromeless')
+      .wait('a[href="https://chromeless.netlify.com/"]')
+      .click('a[href="https://chromeless.netlify.com/"]')
+      .wait('#root')
+
+
+    const url = await chromeless.evaluate(url => window.location.href)
+
+
+    expect(url).to.match(/^https\:\/\/chromeless\.netlify\.com/)
+    await chromeless.end()
+  })
+})
